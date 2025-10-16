@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'dart:io';
@@ -52,14 +54,46 @@ class Interventi extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
+  AppDatabase.custom(File file)
+    : super(NativeDatabase(file, logStatements: true));
+
   @override
   int get schemaVersion => 1;
 }
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbFolder = await getApplicationSupportDirectory();
+
+    if (!await dbFolder.exists()) {
+      await dbFolder.create(recursive: true);
+      log('📁 Cartella DB creata: ${dbFolder.path}', name: 'OPEN_CONNECTION');
+    } else {
+      log(
+        '📁 Cartella DB esistente: ${dbFolder.path}',
+        name: 'OPEN_CONNECTION',
+      );
+    }
+
     final file = File(p.join(dbFolder.path, 'catalogo_enti.sqlite'));
+    try {
+      if (!await file.exists()) {
+        await file.create();
+        log(
+          '📄 File DB non trovato, creato nuovo: ${file.path}',
+          name: 'OPEN_CONNECTION',
+        );
+      } else {
+        log('📄 File DB esistente: ${file.path}', name: 'OPEN_CONNECTION');
+      }
+    } catch (exception) {
+      log(
+        'Errore nell\'apertura del file: $exception',
+        name: 'OPEN_CONNECTION',
+      );
+      throw Exception('Errore nella creazione del file del database.');
+    }
+
     return NativeDatabase(file);
   });
 }

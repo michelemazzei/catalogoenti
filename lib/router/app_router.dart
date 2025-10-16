@@ -1,15 +1,14 @@
+import 'package:catalogoenti/features/dashboard/ui/dashboard_sreen.dart';
+import 'package:catalogoenti/features/place_holder/ui/placeholder_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import '../screens/home_screen.dart';
-import '../screens/placeholder_screen.dart';
-
-final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+final appRouter = GoRouter(
+  initialLocation: '/dashboard',
   routes: [
     GoRoute(
-      path: '/',
-      name: 'home',
-      builder: (context, state) => const HomeScreen(),
+      path: '/dashboard',
+      name: 'dashboard',
+      builder: (context, state) => const DashboardScreen(),
     ),
     GoRoute(
       path: '/enti',

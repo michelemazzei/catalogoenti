@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
-import 'app_database.dart';
+
+import '../database/app_database.dart';
 
 part 'app_dao.g.dart';
 
@@ -16,6 +17,8 @@ class AppDao extends DatabaseAccessor<AppDatabase> with _$AppDaoMixin {
       (select(reparti)..where((r) => r.enteId.equals(enteId))).get();
   Future<int> insertReparto(Reparto reparto) => into(reparti).insert(reparto);
 
+  // MATERIALI – Recupero completo
+  Future<List<Materiale>> getAllMateriali() => select(materiali).get();
   // MATERIALI
   Future<List<Materiale>> getMaterialiByReparto(int repartoId) =>
       (select(materiali)..where((m) => m.repartoId.equals(repartoId))).get();
