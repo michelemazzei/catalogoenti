@@ -43,6 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/windows
 
 # Flutter/Dart/Pub related
 .dart_tool/
