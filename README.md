@@ -1,16 +1,37 @@
-# catalogoenti
 
-A new Flutter project.
+📘 Catalogo Enti
 
-## Getting Started
+Un'app Flutter per la gestione di un catalogo di prodotti soggetti a manutenzione, con particolare attenzione al contesto militare.
 
-This project is a starting point for a Flutter application.
+🚀 Obiettivi
 
-A few resources to get you started if this is your first Flutter project:
+* Archiviazione e consultazione di parti di ricambio e revisioni
+* Importazione da Excel con Drift e Riverpod
+* Interfaccia modulare e scalabile, basata su Material 3
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+🧱 Tecnologie
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* **Flutter** : UI cross-platform
+* **Drift** : ORM per SQLite
+* **Riverpod** : gestione dello stato
+* **Freezed** : modelli immutabili e union types
+* **SQLite** : database locale
+
+📂 Struttura (in progress)
+
+* `features/`: moduli verticali per ogni funzionalità
+* `core/`: utilità condivise
+* `data/`: DAO e repository
+* `presentation/`: UI e navigazione
+
+📥 Importazione dati
+
+Supporto per import da file Excel con logging e gestione errori. Ogni parte può avere più revisioni, tracciate e collegate.
+
+🧪 Test
+
+Test unitari su DAO, repository e logica di importazione.
+
+📌 Stato attuale
+
+Progetto in fase iniziale. Struttura modulare e repository pulito già impostati. Prossimo step: modellazione delle revisioni e UI placeholder.

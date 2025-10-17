@@ -37,3 +37,34 @@ Future<int> getOrInsertMateriale(AppDatabase db, MaterialiCompanion m) async {
   if (existing != null) return existing.id;
   return await db.into(db.materiali).insert(m);
 }
+
+Future<int> getOrInsertContratto(
+  AppDatabase db,
+  String codice,
+  double? tassoRivalutazione,
+  double? indiceDAAA,
+  DateTime dataInizio, {
+  DateTime? dataFine,
+}) async {
+  final existing = await (db.select(
+    db.contratti,
+  )..where((c) => c.codice.equals(codice))).getSingleOrNull();
+
+  if (existing != null) {
+    return existing.id;
+  }
+
+  final contrattoId = await db
+      .into(db.contratti)
+      .insert(
+        ContrattiCompanion.insert(
+          codice: codice,
+          dataInizio: dataInizio,
+          dataFine: Value(dataFine),
+          tassoRivalutazione: Value(tassoRivalutazione ?? 1.0),
+          indiceDAAA: Value(indiceDAAA ?? 1.0),
+        ),
+      );
+
+  return contrattoId;
+}
