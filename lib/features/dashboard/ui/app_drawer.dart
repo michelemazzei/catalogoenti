@@ -36,7 +36,7 @@ class AppDrawer extends ConsumerWidget {
               if (file != null) {
                 await ref
                     .read(databaseManagerProvider.notifier)
-                    .loadFromFile(file);
+                    .loadOrCreate(file);
                 final path = ref.read(databaseManagerProvider.notifier).path;
                 if (context.mounted) {
                   ScaffoldMessenger.maybeOf(context)?.showSnackBar(
