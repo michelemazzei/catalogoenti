@@ -1,3 +1,4 @@
+import 'package:catalogoenti/data/database/database_manager.dart';
 import 'package:catalogoenti/features/dashboard/controller/dashboard_controller.dart';
 import 'package:catalogoenti/features/dashboard/ui/app_drawer.dart';
 import 'package:catalogoenti/features/dashboard/ui/dashboard_card.dart';
@@ -25,17 +26,28 @@ class DashboardScreen extends HookConsumerWidget {
       data: (stats) => Scaffold(
         appBar: AppBar(title: const Text('Dashboard')),
         drawer: const AppDrawer(),
-        bottomNavigationBar: Padding(
-          padding: EdgeInsetsGeometry.only(bottom: 10),
-          child: SizedBox(
-            height: 32,
-            child: Center(
+        bottomNavigationBar: Consumer(
+          builder: (context, ref, _) {
+            final dbManager = ref.watch(databaseManagerProvider.notifier);
+            final path = dbManager.path;
+            final isMemory = dbManager.isInMemory;
+
+            final status = isMemory
+                ? '🧪 Database in memoria (fallback)'
+                : '📁 Database: ${path ?? "?"}';
+
+            return Container(
+              height: 40,
+              color: Theme.of(context).colorScheme.surface,
+              alignment: Alignment.center,
               child: Text(
-                '📁 ${stats.materialiCount} materiali — ${stats.entiCount} enti',
-                style: Theme.of(context).textTheme.bodySmall,
+                status,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
 
         body: SingleChildScrollView(

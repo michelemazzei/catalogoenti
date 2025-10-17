@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 Future<File?> pickDatabaseFile() async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
-    allowedExtensions: ['sqlite'],
+    allowedExtensions: ['sqlite', 'db'],
   );
 
   if (result != null && result.files.single.path != null) {
