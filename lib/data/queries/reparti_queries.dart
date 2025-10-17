@@ -10,4 +10,12 @@ class RepartiQueries extends DatabaseAccessor<AppDatabase>
 
   Future<List<Reparto>> getRepartiByEnte(int enteId) =>
       (select(reparti)..where((r) => r.enteId.equals(enteId))).get();
+
+  Future<List<Reparto>> getRepartiByEnteId(int enteId) {
+    return (select(reparti)..where((r) => r.enteId.equals(enteId))).get();
+  }
+
+  Future<Reparto> getRepartoById(int id) {
+    return (select(reparti)..where((r) => r.id.equals(id))).getSingle();
+  }
 }

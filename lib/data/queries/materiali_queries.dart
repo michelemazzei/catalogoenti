@@ -12,4 +12,12 @@ class MaterialiQueries extends DatabaseAccessor<AppDatabase>
 
   Future<List<Materiale>> getMaterialiByReparto(int repartoId) =>
       (select(materiali)..where((m) => m.repartoId.equals(repartoId))).get();
+
+  Future<List<Materiale>> getMaterialiByRepartiIds(List<int> repartoIds) {
+    if (repartoIds.isEmpty) return Future.value([]);
+
+    return (select(
+      materiali,
+    )..where((m) => m.repartoId.isIn(repartoIds))).get();
+  }
 }

@@ -9,4 +9,9 @@ class EntiCommands extends DatabaseAccessor<AppDatabase>
   EntiCommands(super.db);
 
   Future<int> insertEnte(Ente ente) => into(enti).insert(ente);
+  Future<void> updateEnte(Ente ente) async {
+    update(enti)
+      ..where((tbl) => tbl.id.equals(ente.id))
+      ..write(EntiCompanion(nome: Value(ente.nome), zona: Value(ente.zona)));
+  }
 }

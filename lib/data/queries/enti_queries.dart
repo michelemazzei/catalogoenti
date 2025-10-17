@@ -9,4 +9,8 @@ class EntiQueries extends DatabaseAccessor<AppDatabase>
   EntiQueries(super.db);
 
   Future<List<Ente>> getAllEnti() => select(enti).get();
+
+  Future<Ente> getEnteById(int id) {
+    return (select(enti)..where((tbl) => tbl.id.equals(id))).getSingle();
+  }
 }

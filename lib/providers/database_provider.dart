@@ -1,17 +1,16 @@
-import 'package:catalogoenti/data/commands/materiali_commands.dart';
-import 'package:catalogoenti/data/commands/interventi_commands.dart';
 import 'package:catalogoenti/data/commands/contratti_commands.dart';
+import 'package:catalogoenti/data/commands/enti_commands.dart';
+import 'package:catalogoenti/data/commands/interventi_commands.dart';
 import 'package:catalogoenti/data/commands/intervento_contratti_commands.dart';
+import 'package:catalogoenti/data/commands/materiali_commands.dart';
 import 'package:catalogoenti/data/commands/reparti_commands.dart';
-
-import 'package:catalogoenti/data/queries/materiali_queries.dart';
-import 'package:catalogoenti/data/queries/interventi_queries.dart';
-import 'package:catalogoenti/data/queries/contratti_queries.dart';
-import 'package:catalogoenti/data/queries/aggregati_queries.dart';
-import 'package:catalogoenti/data/queries/enti_queries.dart';
-import 'package:catalogoenti/data/queries/reparti_queries.dart';
-
 import 'package:catalogoenti/data/database/database_manager.dart';
+import 'package:catalogoenti/data/queries/aggregati_queries.dart';
+import 'package:catalogoenti/data/queries/contratti_queries.dart';
+import 'package:catalogoenti/data/queries/enti_queries.dart';
+import 'package:catalogoenti/data/queries/interventi_queries.dart';
+import 'package:catalogoenti/data/queries/materiali_queries.dart';
+import 'package:catalogoenti/data/queries/reparti_queries.dart';
 import 'package:catalogoenti/data/session/dao_session_cqrs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -93,7 +92,10 @@ Future<DaoSessionCQRS> daoSessionCQRS(Ref ref) async {
   final db = await ref.watch(databaseManagerProvider.future);
 
   return DaoSessionCQRS(
-    materialiQueries: MaterialiQueries(db!),
+    repartiCommands: RepartiCommands(db!),
+    repartiQueries: RepartiQueries(db),
+    entiCommands: EntiCommands(db),
+    materialiQueries: MaterialiQueries(db),
     materialiCommands: MaterialiCommands(db),
     interventiQueries: InterventiQueries(db),
     interventiCommands: InterventiCommands(db),

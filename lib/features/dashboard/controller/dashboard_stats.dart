@@ -9,5 +9,6 @@ abstract class DashboardStats with _$DashboardStats {
     required int materialiCount,
     required int inScadenzaCount,
     required int daCalibrareCount,
+    required int contrattiCount,
   }) = _DashboardStats;
 }

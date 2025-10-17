@@ -3,6 +3,7 @@ import 'package:catalogoenti/features/dashboard/controller/dashboard_controller.
 import 'package:catalogoenti/features/dashboard/ui/app_drawer.dart';
 import 'package:catalogoenti/features/dashboard/ui/dashboard_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DashboardScreen extends HookConsumerWidget {
@@ -52,18 +53,47 @@ class DashboardScreen extends HookConsumerWidget {
 
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
             children: [
-              DashboardCard(label: 'Enti', count: stats.entiCount),
-              DashboardCard(label: 'Materiali', count: stats.materialiCount),
+              DashboardCard(
+                label: 'Enti',
+                count: stats.entiCount,
+                onTap: () => context.pushNamed('enti'),
+              ),
+
+              DashboardCard(
+                label: 'Materiali',
+                count: stats.materialiCount,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Container()),
+                ),
+              ),
               DashboardCard(
                 label: 'Da calibrare',
                 count: stats.daCalibrareCount,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Container()),
+                ),
               ),
               DashboardCard(
                 label: 'In scadenza (un anno)',
                 count: stats.inScadenzaCount,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Container()),
+                ),
+              ),
+              DashboardCard(
+                label: 'Contratti',
+                count: stats.contrattiCount,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => Container()),
+                ),
               ),
             ],
           ),

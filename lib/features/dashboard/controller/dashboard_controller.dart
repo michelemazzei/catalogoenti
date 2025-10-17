@@ -16,6 +16,7 @@ class DashboardController extends _$DashboardController {
 
       final enti = await daoSession.entiQueries.getAllEnti();
       final materiali = await daoSession.materialiQueries.getAllMateriali();
+      final contratti = await daoSession.contrattiQueries.getAllContratti();
 
       int daCalibrare = 0;
       int inScadenza = 0;
@@ -47,6 +48,7 @@ class DashboardController extends _$DashboardController {
       }
 
       return DashboardStats(
+        contrattiCount: contratti.length,
         entiCount: enti.length,
         materialiCount: materiali.length,
         inScadenzaCount: inScadenza,
