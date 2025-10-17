@@ -12,7 +12,7 @@ part 'app_database.g.dart';
 class Enti extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get nome => text()();
-  TextColumn get zona => text()(); // "Nord" o "Sud"
+  TextColumn get zona => text().nullable()(); // "Nord" o "Sud"
 }
 
 @DataClassName('Reparto')
@@ -53,9 +53,13 @@ class Interventi extends Table {
 @DriftDatabase(tables: [Enti, Reparti, Materiali, Interventi])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
+  AppDatabase._internal(super.e);
 
   AppDatabase.custom(File file)
     : super(NativeDatabase(file, logStatements: true));
+  factory AppDatabase.inMemory() {
+    return AppDatabase._internal(NativeDatabase.memory());
+  }
 
   @override
   int get schemaVersion => 1;

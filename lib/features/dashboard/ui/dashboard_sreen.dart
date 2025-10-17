@@ -11,13 +11,34 @@ class DashboardScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(dashboardControllerProvider);
 
-    return Scaffold(
-      drawer: AppDrawer(),
-      appBar: AppBar(title: const Text('Dashboard')),
-      body: statsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('$error')),
-        data: (stats) => SingleChildScrollView(
+    return statsAsync.when(
+      loading: () => Scaffold(
+        appBar: AppBar(title: Text('Dashboard')),
+        drawer: AppDrawer(),
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Scaffold(
+        appBar: AppBar(title: const Text('Dashboard')),
+        drawer: const AppDrawer(),
+        body: Center(child: Text('Errore: $error')),
+      ),
+      data: (stats) => Scaffold(
+        appBar: AppBar(title: const Text('Dashboard')),
+        drawer: const AppDrawer(),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsetsGeometry.only(bottom: 10),
+          child: SizedBox(
+            height: 32,
+            child: Center(
+              child: Text(
+                '📁 ${stats.materialiCount} materiali — ${stats.entiCount} enti',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          ),
+        ),
+
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -27,6 +48,10 @@ class DashboardScreen extends HookConsumerWidget {
               DashboardCard(
                 label: 'Da calibrare',
                 count: stats.daCalibrareCount,
+              ),
+              DashboardCard(
+                label: 'In scadenza (un anno)',
+                count: stats.inScadenzaCount,
               ),
             ],
           ),

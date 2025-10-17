@@ -38,9 +38,32 @@ class DashboardController extends _$DashboardController {
       }
     }
 
+    int inScadenza = 0;
+    final now = DateTime.now();
+    final limite = now.add(const Duration(days: 365));
+
+    for (final materiale in materiali) {
+      final interventi = await dao.getInterventiByMateriale(materiale.id);
+      final ultima = interventi
+          .map((i) => i.dataIntervento)
+          .fold<DateTime?>(
+            null,
+            (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev,
+          );
+
+      if (ultima != null) {
+        final prossima = ultima.add(Duration(days: materiale.periodicita * 30));
+        if (prossima.isAfter(now) && prossima.isBefore(limite)) {
+          inScadenza++;
+        }
+      }
+    }
+
     return DashboardStats(
       entiCount: enti.length,
       materialiCount: materiali.length,
+      inScadenzaCount: inScadenza,
+
       daCalibrareCount: daCalibrare,
     );
   }

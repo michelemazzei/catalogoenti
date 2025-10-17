@@ -38,11 +38,15 @@ class AppDrawer extends ConsumerWidget {
                     .read(databaseManagerProvider.notifier)
                     .loadFromFile(file);
                 final path = ref.read(databaseManagerProvider.notifier).path;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('📦 Database caricato: ${path ?? file.path}'),
-                  ),
-                );
+                if (context.mounted) {
+                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        '📦 Database caricato: ${path ?? file.path}',
+                      ),
+                    ),
+                  );
+                }
               }
             },
           ),

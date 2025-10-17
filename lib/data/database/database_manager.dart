@@ -41,7 +41,15 @@ class DatabaseManager extends _$DatabaseManager {
     return _db;
   }
 
+  Future<void> inMemory() async {
+    dispose();
+    _path = 'In Memory';
+    _db = AppDatabase.inMemory();
+    state = AsyncValue.data(_db);
+  }
+
   Future<void> loadFromFile(File file) async {
+    dispose();
     if (!await file.exists()) {
       log('❌ Il file non esiste: ${file.path}', name: 'DatabaseManager');
       _path = 'File inesistente';

@@ -1,11 +1,13 @@
-class DashboardStats {
-  final int entiCount;
-  final int materialiCount;
-  final int daCalibrareCount;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  const DashboardStats({
-    required this.entiCount,
-    required this.materialiCount,
-    required this.daCalibrareCount,
-  });
+part 'dashboard_stats.freezed.dart';
+
+@freezed
+abstract class DashboardStats with _$DashboardStats {
+  const factory DashboardStats({
+    required int entiCount,
+    required int materialiCount,
+    required int inScadenzaCount,
+    required int daCalibrareCount,
+  }) = _DashboardStats;
 }
