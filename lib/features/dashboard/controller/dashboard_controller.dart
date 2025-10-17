@@ -9,23 +9,23 @@ part 'dashboard_controller.g.dart';
 class DashboardController extends _$DashboardController {
   @override
   Future<DashboardStats> build() async {
-    final dao = await ref.watch(appDaoProvider.future);
+    final daoSession = await ref.watch(daoSessionCQRSProvider.future);
 
-    final enti = await dao.getAllEnti();
-    final materiali = await dao.getAllMateriali();
+    final enti = await daoSession.entiQueries.getAllEnti();
+    final materiali = await daoSession.materialiQueries.getAllMateriali();
 
     int daCalibrare = 0;
 
     for (final materiale in materiali) {
-      final interventi = await dao.getInterventiByMateriale(materiale.id);
+      final interventi = await daoSession.interventiQueries
+          .getInterventiByMateriale(materiale.id);
 
-      final ultima = interventi.map((i) => i.dataIntervento).fold<DateTime?>(
-        null,
-        (prev, curr) {
-          if (prev == null || curr.isAfter(prev)) return curr;
-          return prev;
-        },
-      );
+      final ultima = interventi
+          .map((i) => i.dataIntervento)
+          .fold<DateTime?>(
+            null,
+            (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev,
+          );
 
       if (ultima == null) {
         daCalibrare++;
@@ -43,7 +43,9 @@ class DashboardController extends _$DashboardController {
     final limite = now.add(const Duration(days: 365));
 
     for (final materiale in materiali) {
-      final interventi = await dao.getInterventiByMateriale(materiale.id);
+      final interventi = await daoSession.interventiQueries
+          .getInterventiByMateriale(materiale.id);
+
       final ultima = interventi
           .map((i) => i.dataIntervento)
           .fold<DateTime?>(
@@ -63,7 +65,6 @@ class DashboardController extends _$DashboardController {
       entiCount: enti.length,
       materialiCount: materiali.length,
       inScadenzaCount: inScadenza,
-
       daCalibrareCount: daCalibrare,
     );
   }

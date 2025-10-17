@@ -64,7 +64,7 @@ Future<void> importMaterialiDaExcel(AppDatabase db, String filePath) async {
 
     materialiImportati++;
     log(
-      '✅ Materiale registrato: $partNumber — $denominazione',
+      '✅ Materiale registrato: $materialeId $partNumber — $denominazione',
       name: 'IMPORT_MATERIALI',
     );
   }
