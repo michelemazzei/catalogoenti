@@ -34,3 +34,10 @@ Future<List<Materiale>> materialiPerEnte(Ref ref, int enteId) async {
 
   return ref.watch(materialiPerRepartiProvider(repartoIds).future);
 }
+
+@riverpod
+Future<(Ente, List<Materiale>)> enteEMateriali(Ref ref, int enteId) async {
+  final ente = await ref.watch(enteByIdProvider(enteId).future);
+  final materiali = await ref.watch(materialiPerEnteProvider(enteId).future);
+  return (ente, materiali);
+}

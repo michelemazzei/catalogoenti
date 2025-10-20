@@ -11,17 +11,18 @@ class EnteDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final enteAsync = ref.watch(enteByIdProvider(enteId));
     final repartiAsync = ref.watch(repartiPerEnteProvider(enteId));
-    final materialiAsync = ref.watch(materialiPerEnteProvider(enteId));
+    final materialiAsync = ref.watch(enteEMaterialiProvider(enteId));
+
     final materiali = materialiAsync.when(
       data: (materiali) => ElevatedButton.icon(
         icon: const Icon(Icons.inventory),
-        label: Text('Materiali (${materiali.length})'),
+        label: Text('Materiali (${materiali.$2.length})'),
         onPressed: () {
           context.pushNamed(
             'materialiPerEnte',
             pathParameters: {'enteId': enteId.toString()},
+            extra: materiali.$1.nome,
           );
         },
       ),
@@ -57,18 +58,18 @@ class EnteDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Dettagli Ente')),
-      body: enteAsync.when(
+      body: materialiAsync.when(
         data: (ente) => Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Nome:', style: Theme.of(context).textTheme.labelLarge),
-              Text(ente.nome, style: Theme.of(context).textTheme.titleLarge),
+              Text(ente.$1.nome, style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
               Text('Zona:', style: Theme.of(context).textTheme.labelLarge),
               Text(
-                ente.zona ?? '',
+                ente.$1.zona ?? '',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
@@ -82,7 +83,7 @@ class EnteDetailScreen extends ConsumerWidget {
                 onPressed: () async {
                   await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => EnteForm(ente: ente)),
+                    MaterialPageRoute(builder: (_) => EnteForm(ente: ente.$1)),
                   );
                   ref.invalidate(
                     enteByIdProvider(enteId),

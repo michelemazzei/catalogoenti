@@ -33,8 +33,9 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final enteIdString = state.pathParameters['enteId'];
         final enteId = int.tryParse(enteIdString ?? '');
+        final enteNome = state.extra as String?;
 
-        return MaterialiScreen(enteId: enteId);
+        return MaterialiScreen(enteId: enteId, enteNome: enteNome);
       },
     ),
     GoRoute(

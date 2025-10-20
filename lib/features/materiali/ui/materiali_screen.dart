@@ -8,8 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MaterialiScreen extends ConsumerStatefulWidget {
   final int? enteId;
+  final String? enteNome;
 
-  const MaterialiScreen({super.key, this.enteId});
+  const MaterialiScreen({super.key, this.enteId, this.enteNome = ''});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _State();
@@ -22,9 +23,8 @@ class _State extends ConsumerState<MaterialiScreen> {
     final materialiAsync = widget.enteId == null
         ? ref.watch(tuttiIMaterialiProvider)
         : ref.watch(materialiPerEnteProvider(widget.enteId!));
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Materiali')),
+      appBar: AppBar(title: Text('Materiali ${widget.enteNome}')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
