@@ -1,6 +1,7 @@
 import 'package:catalogoenti/features/dashboard/ui/dashboard_sreen.dart';
 import 'package:catalogoenti/features/enti/ui/ente_detail_screen.dart';
 import 'package:catalogoenti/features/enti/ui/enti_screen.dart';
+import 'package:catalogoenti/features/materiali/ui/materiale_dettaglio_screen.dart';
 import 'package:catalogoenti/features/materiali/ui/materiali_screen.dart';
 import 'package:catalogoenti/features/place_holder/ui/placeholder_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +35,14 @@ final appRouter = GoRouter(
         final enteId = int.tryParse(enteIdString ?? '');
 
         return MaterialiScreen(enteId: enteId);
+      },
+    ),
+    GoRoute(
+      name: 'materialeDettaglio',
+      path: '/materiali/dettaglio/:id',
+      builder: (context, state) {
+        final id = int.tryParse(state.pathParameters['id'] ?? '');
+        return MaterialeDettaglioScreen(id: id);
       },
     ),
 

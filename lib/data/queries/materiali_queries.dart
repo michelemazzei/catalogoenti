@@ -8,10 +8,17 @@ class MaterialiQueries extends DatabaseAccessor<AppDatabase>
     with _$MaterialiQueriesMixin {
   MaterialiQueries(super.db);
 
-  Future<List<Materiale>> getAllMateriali() => select(materiali).get();
+  Future<List<Materiale>> getAllMateriali() {
+    return (select(
+      materiali,
+    )..orderBy([(m) => OrderingTerm(expression: m.partNumber)])).get();
+  }
 
   Future<List<Materiale>> getMaterialiByReparto(int repartoId) =>
       (select(materiali)..where((m) => m.repartoId.equals(repartoId))).get();
+
+  Future<Materiale?> getMaterialeById(int id) =>
+      (select(materiali)..where((m) => m.id.equals(id))).getSingleOrNull();
 
   Future<List<Materiale>> getMaterialiByRepartiIds(List<int> repartoIds) {
     if (repartoIds.isEmpty) return Future.value([]);

@@ -38,11 +38,15 @@ Future<void> importInterventiDaExcel(
 
   for (final row in sheet.rows.skip(1)) {
     final partNumber = row[3]?.value?.toString().trim();
+    final quantitaStr = row[5]?.value?.toString().trim();
     final prezzoUnitarioStr = row[8]?.value?.toString();
     final dataInterventoStr = row[13]?.value?.toString();
     final note = row[14]?.value?.toString().trim();
+    final quantita = int.tryParse(quantitaStr ?? '');
 
     if (partNumber == null ||
+        quantita == null ||
+        quantitaStr == null ||
         partNumber.isEmpty ||
         prezzoUnitarioStr == null ||
         dataInterventoStr == null) {
@@ -84,6 +88,14 @@ Future<void> importInterventiDaExcel(
             contrattoId: contrattoId,
           ),
         );
+
+    await getOrUpdateMaterialeReparto(
+      db: db,
+      materialeId: materiale.id,
+      repartoId: materiale.repartoId,
+      quantita: quantita,
+      ultimaManutenzione: dataIntervento,
+    );
 
     interventiImportati++;
     log(

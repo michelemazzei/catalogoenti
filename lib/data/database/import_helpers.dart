@@ -68,3 +68,44 @@ Future<int> getOrInsertContratto(
 
   return contrattoId;
 }
+
+Future<void> getOrUpdateMaterialeReparto({
+  required AppDatabase db,
+  required int materialeId,
+  required int repartoId,
+  required int quantita,
+  required DateTime ultimaManutenzione,
+}) async {
+  final existing =
+      await (db.select(db.materialiReparti)..where(
+            (tbl) =>
+                tbl.materialeId.equals(materialeId) &
+                tbl.repartoId.equals(repartoId),
+          ))
+          .getSingleOrNull();
+
+  if (existing == null) {
+    await db
+        .into(db.materialiReparti)
+        .insert(
+          MaterialiRepartiCompanion.insert(
+            materialeId: materialeId,
+            repartoId: repartoId,
+            quantita: Value(quantita),
+            ultimaManutenzione: Value(ultimaManutenzione),
+          ),
+        );
+  } else {
+    await (db.update(db.materialiReparti)..where(
+          (tbl) =>
+              tbl.materialeId.equals(materialeId) &
+              tbl.repartoId.equals(repartoId),
+        ))
+        .write(
+          MaterialiRepartiCompanion(
+            quantita: Value(quantita),
+            ultimaManutenzione: Value(ultimaManutenzione),
+          ),
+        );
+  }
+}

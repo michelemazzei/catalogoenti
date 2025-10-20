@@ -3,6 +3,7 @@ import 'package:catalogoenti/features/materiali/extensions/materiale_extension.d
 import 'package:catalogoenti/features/materiali/providers/materiali_providers.dart';
 import 'package:catalogoenti/shared/widgets/text_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MaterialiScreen extends ConsumerStatefulWidget {
@@ -56,7 +57,10 @@ class _State extends ConsumerState<MaterialiScreen> {
                         title: Text(item.partNumber),
                         subtitle: Text('Descrizione: ${item.denominazione}'),
                         onTap: () {
-                          // Azione sul materiale
+                          context.pushNamed(
+                            'materialeDettaglio',
+                            pathParameters: {'id': '${item.id}'},
+                          );
                         },
                       );
                     },

@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 class PlaceholderScreen extends StatelessWidget {
   final String title;
   final String message;
+  final String submessage;
+  final IconData icon;
 
   const PlaceholderScreen({
     super.key,
+    this.icon = Icons.construction,
+    this.submessage = 'Funzionalità in arrivo...',
     required this.title,
     required this.message,
   });
@@ -29,11 +33,7 @@ class PlaceholderScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.construction,
-                size: 64,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(icon, size: 64, color: theme.colorScheme.primary),
               const SizedBox(height: 24),
               Text(
                 message,
@@ -44,7 +44,7 @@ class PlaceholderScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Text(
-                'Funzionalità in arrivo...',
+                submessage,
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),

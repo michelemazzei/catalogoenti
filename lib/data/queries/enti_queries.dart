@@ -3,7 +3,7 @@ import '../database/app_database.dart';
 
 part 'enti_queries.g.dart';
 
-@DriftAccessor(tables: [Enti])
+@DriftAccessor(tables: [Enti, Materiali])
 class EntiQueries extends DatabaseAccessor<AppDatabase>
     with _$EntiQueriesMixin {
   EntiQueries(super.db);

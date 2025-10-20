@@ -36,6 +36,17 @@ class Materiali extends Table {
       integer().nullable()(); // derivato, opzionale
 }
 
+@DataClassName('MaterialeReparto')
+class MaterialiReparti extends Table {
+  IntColumn get materialeId => integer().references(Materiali, #id)();
+  IntColumn get repartoId => integer().references(Reparti, #id)();
+  IntColumn get quantita => integer().withDefault(const Constant(1))();
+  DateTimeColumn get ultimaManutenzione => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {materialeId, repartoId};
+}
+
 @DataClassName('Intervento')
 class Interventi extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -67,6 +78,7 @@ class InterventoContratti extends Table {
     Reparti,
     Materiali,
     Interventi,
+    MaterialiReparti,
     Contratti,
     InterventoContratti,
   ],
