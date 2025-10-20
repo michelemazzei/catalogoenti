@@ -6,6 +6,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'materiali_providers.g.dart';
 
 @riverpod
+Future<List<Materiale>> tuttiIMateriali(Ref ref) async {
+  final dao = await ref.watch(daoSessionCQRSProvider.future);
+  return dao.materialiQueries.getAllMateriali();
+}
+
+@riverpod
 Future<List<Materiale>> materialiPerReparti(
   Ref ref,
   List<int> repartoIds,

@@ -1,6 +1,7 @@
 import 'package:catalogoenti/features/dashboard/ui/dashboard_sreen.dart';
 import 'package:catalogoenti/features/enti/ui/ente_detail_screen.dart';
 import 'package:catalogoenti/features/enti/ui/enti_screen.dart';
+import 'package:catalogoenti/features/materiali/ui/materiali_screen.dart';
 import 'package:catalogoenti/features/place_holder/ui/placeholder_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,11 +30,10 @@ final appRouter = GoRouter(
       name: 'materialiPerEnte',
       path: '/materiali/ente/:enteId',
       builder: (context, state) {
-        final enteId = int.parse(state.pathParameters['enteId']!);
-        return const PlaceholderScreen(
-          title: 'Materiali',
-          message: 'La pagina Materiali non è ancora disponibile.',
-        );
+        final enteIdString = state.pathParameters['enteId'];
+        final enteId = int.tryParse(enteIdString ?? '');
+
+        return MaterialiScreen(enteId: enteId);
       },
     ),
 
@@ -67,14 +67,13 @@ final appRouter = GoRouter(
         );
       },
     ),
+
     GoRoute(
-      path: '/materiali',
       name: 'materiali',
-      builder: (context, state) => const PlaceholderScreen(
-        title: 'Materiali',
-        message: 'La pagina Materiali non è ancora disponibile.',
-      ),
+      path: '/materiali',
+      builder: (context, state) => const MaterialiScreen(),
     ),
+
     GoRoute(
       path: '/interventi',
       name: 'interventi',

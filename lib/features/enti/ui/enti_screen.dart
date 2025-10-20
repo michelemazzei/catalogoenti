@@ -1,3 +1,4 @@
+import 'package:catalogoenti/features/enti/extensions/ente_extension.dart';
 import 'package:catalogoenti/features/enti/providers/enti_providers.dart';
 import 'package:catalogoenti/shared/widgets/text_search_bar.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,7 @@ class _EntiScreenState extends ConsumerState<EntiScreen> {
                 data: (enti) {
                   final filtrati = filtro.isEmpty
                       ? enti
-                      : enti
-                            .where((e) => e.nome.toLowerCase().contains(filtro))
-                            .toList();
+                      : enti.where((e) => e.contiene(filtro)).toList();
 
                   if (filtrati.isEmpty) {
                     return const Center(child: Text('Nessun ente trovato.'));
