@@ -38,6 +38,36 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
+      name: 'contratti',
+      path: '/contratti',
+      builder: (context, state) {
+        return const PlaceholderScreen(
+          title: 'Contratti',
+          message: 'La pagina Materiali non è ancora disponibile.',
+        );
+      },
+    ),
+    GoRoute(
+      name: 'scadenza',
+      path: '/scadenza',
+      builder: (context, state) {
+        return const PlaceholderScreen(
+          title: 'Calibrazioni in scadenza',
+          message: 'La pagina Materiali non è ancora disponibile.',
+        );
+      },
+    ),
+    GoRoute(
+      name: 'dacalibrare',
+      path: '/dacalibrare',
+      builder: (context, state) {
+        return const PlaceholderScreen(
+          title: 'Materiali da calibrare',
+          message: 'La pagina Materiali non è ancora disponibile.',
+        );
+      },
+    ),
+    GoRoute(
       path: '/materiali',
       name: 'materiali',
       builder: (context, state) => const PlaceholderScreen(

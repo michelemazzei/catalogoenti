@@ -66,34 +66,22 @@ class DashboardScreen extends HookConsumerWidget {
               DashboardCard(
                 label: 'Materiali',
                 count: stats.materialiCount,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => Container()),
-                ),
+                onTap: () => context.pushNamed('materiali'),
               ),
               DashboardCard(
                 label: 'Da calibrare',
                 count: stats.daCalibrareCount,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => Container()),
-                ),
+                onTap: () => context.pushNamed('dacalibrare'),
               ),
               DashboardCard(
                 label: 'In scadenza (un anno)',
                 count: stats.inScadenzaCount,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => Container()),
-                ),
+                onTap: () => context.pushNamed('scadenza'),
               ),
               DashboardCard(
                 label: 'Contratti',
                 count: stats.contrattiCount,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => Container()),
-                ),
+                onTap: () => context.pushNamed('contratti'),
               ),
             ],
           ),
