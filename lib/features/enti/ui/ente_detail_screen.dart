@@ -15,9 +15,9 @@ class EnteDetailScreen extends ConsumerWidget {
     final materialiAsync = ref.watch(enteEMaterialiProvider(enteId));
 
     final materiali = materialiAsync.when(
-      data: (materiali) => ElevatedButton.icon(
+      data: (materiali) => TextButton.icon(
         icon: const Icon(Icons.inventory),
-        label: Text('Materiali (${materiali.$2.length})'),
+        label: Text('Vedi Materiali (${materiali.$2.length})'),
         onPressed: () {
           context.pushNamed(
             'materialiPerEnte',
