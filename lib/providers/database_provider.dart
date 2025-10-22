@@ -7,6 +7,7 @@ import 'package:catalogoenti/data/commands/materiali_reparti_commands.dart';
 import 'package:catalogoenti/data/commands/reparti_commands.dart';
 import 'package:catalogoenti/data/database/database_manager.dart';
 import 'package:catalogoenti/data/queries/aggregati_queries.dart';
+import 'package:catalogoenti/data/queries/calibrazioni_queries.dart';
 import 'package:catalogoenti/data/queries/contratti_queries.dart';
 import 'package:catalogoenti/data/queries/enti_queries.dart';
 import 'package:catalogoenti/data/queries/interventi_queries.dart';
@@ -106,7 +107,8 @@ Future<DaoSessionCQRS> daoSessionCQRS(Ref ref) async {
   final db = await ref.watch(databaseManagerProvider.future);
 
   return DaoSessionCQRS(
-    materialiRepartiCommands: MaterialiRepartiCommands(db!),
+    calibrazioniQueries: CalibrazioniQueries(db!),
+    materialiRepartiCommands: MaterialiRepartiCommands(db),
     materialiRepartiQueries: MaterialiRepartiQueries(db),
     repartiCommands: RepartiCommands(db),
     repartiQueries: RepartiQueries(db),

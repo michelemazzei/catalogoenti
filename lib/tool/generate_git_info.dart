@@ -2,7 +2,6 @@
 import 'dart:io';
 
 void main() async {
-  print('\nGENERATE GIT INFO TOOL.');
   // Get current branch
   final branchResult = await Process.run('git', [
     'rev-parse',
@@ -39,9 +38,4 @@ const String gitTag = "$tag";
 const String gitCommit = "$commit";
 const String gitCommitDate = "$commitDate";
 ''');
-  print('------ RESULTS --------');
-  print('1. TAG:                    $tag ');
-  print('2. COMMIT:                 $commit ');
-  print('3. LAST COMMIT DATE:       $commitDate ');
-  print('4. FILE GENERATED/UPDATED: lib/git_info.dart .\n');
 }

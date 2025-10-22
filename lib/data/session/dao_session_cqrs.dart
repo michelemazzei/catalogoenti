@@ -5,6 +5,7 @@ import 'package:catalogoenti/data/commands/materiali_commands.dart';
 import 'package:catalogoenti/data/commands/materiali_reparti_commands.dart';
 import 'package:catalogoenti/data/commands/reparti_commands.dart';
 import 'package:catalogoenti/data/queries/aggregati_queries.dart';
+import 'package:catalogoenti/data/queries/calibrazioni_queries.dart';
 import 'package:catalogoenti/data/queries/contratti_queries.dart';
 import 'package:catalogoenti/data/queries/enti_queries.dart';
 import 'package:catalogoenti/data/queries/interventi_queries.dart';
@@ -26,8 +27,10 @@ class DaoSessionCQRS {
   final RepartiQueries repartiQueries;
   final MaterialiRepartiQueries materialiRepartiQueries;
   final MaterialiRepartiCommands materialiRepartiCommands;
+  final CalibrazioniQueries calibrazioniQueries;
 
   DaoSessionCQRS({
+    required this.calibrazioniQueries,
     required this.materialiRepartiCommands,
     required this.materialiRepartiQueries,
     required this.repartiCommands,
