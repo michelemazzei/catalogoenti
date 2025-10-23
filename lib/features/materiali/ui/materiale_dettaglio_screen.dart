@@ -1,6 +1,7 @@
 import 'package:catalogoenti/features/materiali/providers/materiali_providers.dart';
 import 'package:catalogoenti/features/place_holder/ui/placeholder_screen.dart';
 import 'package:catalogoenti/features/materiali/widgets/enti_possessori_wdget.dart';
+import 'package:catalogoenti/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -20,7 +21,7 @@ class MaterialeDettaglioScreen extends ConsumerWidget {
       );
     }
 
-    final materialeAsync = ref.watch(materialeByIdProvider(id!));
+    final materialeAsync = ref.watch(materialeConUltimoInterventoProvider(id!));
 
     return Scaffold(
       appBar: AppBar(title: const Text('Dettaglio Materiale')),
@@ -40,25 +41,29 @@ class MaterialeDettaglioScreen extends ConsumerWidget {
             return ListView(
               children: [
                 Text(
-                  'Part Number: ${m.partNumber}',
+                  'Part Number: ${m.materiale.partNumber}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8),
-                Text('NSN: ${m.nsn}'),
+                Text('NSN: ${m.materiale.nsn}'),
                 const SizedBox(height: 8),
-                Text('Denominazione: ${m.denominazione}'),
+                Text('Denominazione: ${m.materiale.denominazione}'),
                 const SizedBox(height: 8),
-                Text('Note: ${m.note ?? ''}'),
+                Text('Note: ${m.materiale.note ?? ''}'),
                 const SizedBox(height: 8),
-                Text('Quantità: ${m.quantita}'),
+                Text('Quantità: ${m.materiale.quantita}'),
                 const SizedBox(height: 8),
-                Text('Periodicitià: ${m.periodicita}'),
+                Text('Periodicitià: ${m.materiale.periodicita}'),
                 const SizedBox(height: 8),
                 Text(
-                  'Numero di calibrazioni ogni anno: ${m.numeroCalibrazioni ?? ''}',
+                  'Numero di calibrazioni ogni anno: ${m.materiale.numeroCalibrazioni ?? (12 / m.materiale.periodicita).toInt()}',
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Ultima data di calibrazione: ${formatDate(m.ultimoIntervento)}',
                 ),
                 const Divider(height: 32),
-                EntiPossessoriWidget(materialeId: m.id),
+                EntiPossessoriWidget(materialeId: m.materiale.id),
               ],
             );
           },

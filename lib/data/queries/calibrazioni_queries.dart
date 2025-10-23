@@ -38,7 +38,10 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
           ? DateTime.fromMillisecondsSinceEpoch(rawTimestamp)
           : null;
 
-      return MaterialeConUltimoIntervento(materiale, ultimaData);
+      return MaterialeConUltimoIntervento(
+        materiale: materiale,
+        ultimoIntervento: ultimaData,
+      );
     }).toList();
   }
 
@@ -50,6 +53,7 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
     FROM materiali m
     LEFT JOIN interventi i ON m.id = i.materiale_id
     GROUP BY m.id
+    ORDER BY m.part_number
     ''',
       readsFrom: {materiali, interventi},
     ).get();
@@ -58,25 +62,28 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
       final materiale = materiali.map(row.data);
       final rawTimestamp = row.data['ultimo_intervento'] as int?;
       final ultimaData = rawTimestamp != null
-          ? DateTime.fromMillisecondsSinceEpoch(rawTimestamp)
+          ? DateTime.fromMillisecondsSinceEpoch(rawTimestamp * 1000)
           : null;
-      return MaterialeConUltimoIntervento(materiale, ultimaData);
+      return MaterialeConUltimoIntervento(
+        materiale: materiale,
+        ultimoIntervento: ultimaData,
+      );
     }).toList();
   }
 
-  Future<List<Materiale>> getMaterialiDaCalibrare() async {
+  Future<List<MaterialeConUltimoIntervento>> getMaterialiDaCalibrare() async {
     final oggi = DateTime.now();
     final materiali = await getMaterialiConUltimoIntervento();
 
-    final daCalibrare = <Materiale>[];
+    final daCalibrare = <MaterialeConUltimoIntervento>[];
 
     for (final row in materiali) {
       final materiale = row.materiale;
-      final ultimaData = row.ultimaIntervento;
+      final ultimaData = row.ultimoIntervento;
       final toAdd = await _isDaCalibrare(materiale, ultimaData, oggi);
 
       if (toAdd) {
-        daCalibrare.add(materiale);
+        daCalibrare.add(row);
         continue;
       }
     }

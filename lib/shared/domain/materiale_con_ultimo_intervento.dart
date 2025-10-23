@@ -1,8 +1,13 @@
 import 'package:catalogoenti/data/database/app_database.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class MaterialeConUltimoIntervento {
-  final Materiale materiale;
-  final DateTime? ultimaIntervento;
+part 'materiale_con_ultimo_intervento.freezed.dart';
 
-  MaterialeConUltimoIntervento(this.materiale, this.ultimaIntervento);
+@freezed
+abstract class MaterialeConUltimoIntervento
+    with _$MaterialeConUltimoIntervento {
+  const factory MaterialeConUltimoIntervento({
+    required Materiale materiale,
+    DateTime? ultimoIntervento,
+  }) = _MaterialeConUltimoIntervento;
 }

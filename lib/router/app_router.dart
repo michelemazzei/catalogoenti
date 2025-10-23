@@ -1,4 +1,6 @@
+import 'package:catalogoenti/features/calibrazione/ui/materiali_con_ultima_calibrazione_screen.dart';
 import 'package:catalogoenti/features/calibrazione/ui/materiali_da_calibrare_screen.dart';
+import 'package:catalogoenti/features/calibrazione/ui/materiali_in_scadenza_screen.dart';
 import 'package:catalogoenti/features/dashboard/ui/dashboard_sreen.dart';
 import 'package:catalogoenti/features/enti/ui/ente_detail_screen.dart';
 import 'package:catalogoenti/features/enti/ui/enti_screen.dart';
@@ -69,10 +71,14 @@ final appRouter = GoRouter(
       name: 'scadenza',
       path: '/scadenza',
       builder: (context, state) {
-        return const PlaceholderScreen(
-          title: 'Calibrazioni in scadenza',
-          message: 'La pagina Materiali non è ancora disponibile.',
-        );
+        return MaterialiInScadenzaScreen();
+      },
+    ),
+    GoRoute(
+      name: 'materialiultimacalibrazione',
+      path: '/materialiultimacalibrazione',
+      builder: (context, state) {
+        return MaterialiConUltimaCalibrazioneScreen();
       },
     ),
 

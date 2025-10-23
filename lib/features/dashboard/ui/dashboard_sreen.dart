@@ -93,9 +93,14 @@ class DashboardScreen extends HookConsumerWidget {
                 onTap: () => context.pushNamed('dacalibrare'),
               ),
               DashboardCard(
-                label: 'In scadenza (un anno)',
+                label: 'Calibrati nell\'anno',
                 count: stats.inScadenzaCount,
                 onTap: () => context.pushNamed('scadenza'),
+              ),
+              DashboardCard(
+                label: 'Materiali con ultima calibrazione',
+                count: stats.materialiCount,
+                onTap: () => context.pushNamed('materialiultimacalibrazione'),
               ),
               DashboardCard(
                 label: 'Contratti',

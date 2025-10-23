@@ -1,5 +1,4 @@
 import 'package:catalogoenti/features/calibrazione/providers/calibrazione_providers.dart';
-import 'package:catalogoenti/features/scadenze/providers/scadenze_providers.dart';
 import 'package:catalogoenti/providers/database_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

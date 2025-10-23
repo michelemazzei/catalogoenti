@@ -1,6 +1,7 @@
 import 'package:catalogoenti/data/database/app_database.dart';
 import 'package:catalogoenti/features/materiali/domain/ente_con_reparti.dart';
 import 'package:catalogoenti/providers/database_provider.dart';
+import 'package:catalogoenti/shared/domain/materiale_con_ultimo_intervento.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,6 +29,15 @@ Future<List<Materiale>> materialiPerReparti(
 Future<Materiale?> materialeById(Ref ref, int id) async {
   final dao = await ref.watch(daoSessionCQRSProvider.future);
   return dao.materialiQueries.getMaterialeById(id);
+}
+
+@riverpod
+Future<MaterialeConUltimoIntervento?> materialeConUltimoIntervento(
+  Ref ref,
+  int id,
+) async {
+  final dao = await ref.watch(materialiQueriesProvider.future);
+  return dao.materialeConUltimoIntervento(id);
 }
 
 @riverpod
