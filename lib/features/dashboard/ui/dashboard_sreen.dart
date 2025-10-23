@@ -11,21 +11,40 @@ class DashboardScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final statsAsync = ref.watch(dashboardControllerProvider);
+    final dashboardAsync = ref.watch(dashboardControllerProvider);
 
-    return statsAsync.when(
-      loading: () => Scaffold(
-        appBar: AppBar(title: Text('Dashboard')),
-        drawer: AppDrawer(),
-        body: Center(child: CircularProgressIndicator()),
-      ),
+    return dashboardAsync.when(
+      loading: () {
+        // triggera il caricamento
+        // ref.read(dashboardControllerProvider.notifier).loadStats();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Dashboard'),
+            actions: [
+              IconButton(icon: const Icon(Icons.refresh), onPressed: null),
+            ],
+          ),
+          drawer: AppDrawer(),
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
       error: (error, _) => Scaffold(
         appBar: AppBar(title: const Text('Dashboard')),
         drawer: const AppDrawer(),
         body: Center(child: Text('Errore: $error')),
       ),
       data: (stats) => Scaffold(
-        appBar: AppBar(title: const Text('Dashboard')),
+        appBar: AppBar(
+          title: const Text('Dashboard'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                ref.read(dashboardControllerProvider.notifier).loadStats();
+              },
+            ),
+          ],
+        ),
         drawer: const AppDrawer(),
         bottomNavigationBar: Consumer(
           builder: (context, ref, _) {

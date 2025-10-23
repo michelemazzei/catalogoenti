@@ -9,6 +9,39 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
     with _$CalibrazioniQueriesMixin {
   CalibrazioniQueries(super.db);
 
+  Future<List<MaterialeConUltimoIntervento>> getMaterialiInScadenza({
+    int days = 365,
+  }) async {
+    final oggi = DateTime.now();
+    final inizioFinestra = oggi.subtract(Duration(days: days + 30)); // ~13 mesi
+    final fineFinestra = oggi.subtract(Duration(days: days - 30)); // ~11 mesi
+
+    final result = await customSelect(
+      '''
+    SELECT m.*, MAX(i.data_intervento) AS ultimo_intervento
+    FROM materiali m
+    LEFT JOIN interventi i ON m.id = i.materiale_id
+    GROUP BY m.id
+    HAVING ultimo_intervento BETWEEN ? AND ?
+    ''',
+      variables: [
+        Variable.withDateTime(inizioFinestra),
+        Variable.withDateTime(fineFinestra),
+      ],
+      readsFrom: {materiali, interventi},
+    ).get();
+
+    return result.map((row) {
+      final materiale = materiali.map(row.data);
+      final rawTimestamp = row.data['ultimo_intervento'] as int?;
+      final ultimaData = rawTimestamp != null
+          ? DateTime.fromMillisecondsSinceEpoch(rawTimestamp)
+          : null;
+
+      return MaterialeConUltimoIntervento(materiale, ultimaData);
+    }).toList();
+  }
+
   Future<List<MaterialeConUltimoIntervento>>
   getMaterialiConUltimoIntervento() async {
     final result = await customSelect(
@@ -22,8 +55,11 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
     ).get();
 
     return result.map((row) {
-      final materiale = Materiale.fromJson(row.data);
-      final ultimaData = row.data['ultimo_intervento'] as DateTime?;
+      final materiale = materiali.map(row.data);
+      final rawTimestamp = row.data['ultimo_intervento'] as int?;
+      final ultimaData = rawTimestamp != null
+          ? DateTime.fromMillisecondsSinceEpoch(rawTimestamp)
+          : null;
       return MaterialeConUltimoIntervento(materiale, ultimaData);
     }).toList();
   }

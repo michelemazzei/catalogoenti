@@ -103,6 +103,12 @@ Future<MaterialiRepartiCommands> materialiRepartiCommands(Ref ref) async {
 }
 
 @Riverpod()
+Future<CalibrazioniQueries> calibrazioniQueries(Ref ref) async {
+  final db = await ref.watch(databaseManagerProvider.future);
+  return CalibrazioniQueries(db!);
+}
+
+@Riverpod()
 Future<DaoSessionCQRS> daoSessionCQRS(Ref ref) async {
   final db = await ref.watch(databaseManagerProvider.future);
 

@@ -1,5 +1,5 @@
-import 'dart:developer';
-
+import 'package:catalogoenti/features/calibrazione/providers/calibrazione_providers.dart';
+import 'package:catalogoenti/features/scadenze/providers/scadenze_providers.dart';
 import 'package:catalogoenti/providers/database_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,53 +11,38 @@ part 'dashboard_controller.g.dart';
 class DashboardController extends _$DashboardController {
   @override
   Future<DashboardStats> build() async {
+    return await _loadStats();
+  }
+
+  Future<void> loadStats() async {
+    if (state is AsyncLoading) return;
+
+    state = const AsyncLoading();
     try {
-      final daoSession = await ref.watch(daoSessionCQRSProvider.future);
-
-      final enti = await daoSession.entiQueries.getAllEnti();
-      final materiali = await daoSession.materialiQueries.getAllMateriali();
-      final contratti = await daoSession.contrattiQueries.getAllContratti();
-
-      int daCalibrare = 0;
-      int inScadenza = 0;
-      final now = DateTime.now();
-      final limite = now.add(const Duration(days: 365));
-
-      for (final materiale in materiali) {
-        final interventi = await daoSession.interventiQueries
-            .getInterventiByMateriale(materiale.id);
-
-        final ultima = interventi
-            .map((i) => i.dataIntervento)
-            .fold<DateTime?>(
-              null,
-              (prev, curr) => prev == null || curr.isAfter(prev) ? curr : prev,
-            );
-
-        if (ultima == null) {
-          daCalibrare++;
-          continue;
-        }
-
-        final prossima = ultima.add(Duration(days: materiale.periodicita * 30));
-        if (prossima.isBefore(now)) {
-          daCalibrare++;
-        } else if (prossima.isBefore(limite)) {
-          inScadenza++;
-        }
-      }
-
-      return DashboardStats(
-        contrattiCount: contratti.length,
-        entiCount: enti.length,
-        materialiCount: materiali.length,
-        inScadenzaCount: inScadenza,
-        daCalibrareCount: daCalibrare,
-      );
+      final stats = await _loadStats();
+      state = AsyncData(stats);
     } catch (e, st) {
-      log('💥 Errore in DashboardController: $e', name: 'DashboardController');
-      log('📍 StackTrace: $st', name: 'DashboardController');
-      rethrow;
+      state = AsyncError(e, st);
     }
+  }
+
+  Future<DashboardStats> _loadStats() async {
+    // Leggi il database manager
+    final dao = await ref.watch(daoSessionCQRSProvider.future);
+
+    final enti = await dao.entiQueries.getAllEnti();
+    final materiali = await dao.materialiQueries.getAllMateriali();
+    final contratti = await dao.contrattiQueries.getAllContratti();
+
+    final daCalibrare = await ref.watch(materialiDaCalibrareProvider.future);
+    final inScadenza = await ref.watch(materialiInScadenzaProvider.future);
+
+    return DashboardStats(
+      contrattiCount: contratti.length,
+      entiCount: enti.length,
+      materialiCount: materiali.length,
+      daCalibrareCount: daCalibrare.length,
+      inScadenzaCount: inScadenza.length,
+    );
   }
 }
