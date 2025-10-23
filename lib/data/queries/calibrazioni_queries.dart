@@ -1,4 +1,5 @@
 import 'package:catalogoenti/shared/domain/materiale_con_ultimo_intervento.dart';
+import 'package:catalogoenti/shared/utils.dart';
 import 'package:drift/drift.dart';
 import '../database/app_database.dart';
 
@@ -34,9 +35,7 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
     return result.map((row) {
       final materiale = materiali.map(row.data);
       final rawTimestamp = row.data['ultimo_intervento'] as int?;
-      final ultimaData = rawTimestamp != null
-          ? DateTime.fromMillisecondsSinceEpoch(rawTimestamp)
-          : null;
+      final ultimaData = rawTimestamp != null ? toDate(rawTimestamp) : null;
 
       return MaterialeConUltimoIntervento(
         materiale: materiale,
@@ -61,9 +60,7 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
     return result.map((row) {
       final materiale = materiali.map(row.data);
       final rawTimestamp = row.data['ultimo_intervento'] as int?;
-      final ultimaData = rawTimestamp != null
-          ? DateTime.fromMillisecondsSinceEpoch(rawTimestamp * 1000)
-          : null;
+      final ultimaData = rawTimestamp != null ? toDate(rawTimestamp) : null;
       return MaterialeConUltimoIntervento(
         materiale: materiale,
         ultimoIntervento: ultimaData,

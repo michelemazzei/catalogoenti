@@ -8,3 +8,7 @@ String formatDate(
       '${date.month.toString().padLeft(2, '0')}/'
       '${date.year}';
 }
+
+DateTime? toDate(int? millisfromEpoc) => millisfromEpoc == null
+    ? null
+    : DateTime.fromMillisecondsSinceEpoch(millisfromEpoc * 1000);

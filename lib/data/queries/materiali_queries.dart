@@ -1,4 +1,5 @@
 import 'package:catalogoenti/shared/domain/materiale_con_ultimo_intervento.dart';
+import 'package:catalogoenti/shared/utils.dart';
 import 'package:drift/drift.dart';
 import '../database/app_database.dart';
 
@@ -39,9 +40,7 @@ class MaterialiQueries extends DatabaseAccessor<AppDatabase>
 
     return MaterialeConUltimoIntervento(
       materiale: materiale,
-      ultimoIntervento: DateTime.fromMillisecondsSinceEpoch(
-        ultimoIntervento * 1000,
-      ),
+      ultimoIntervento: toDate(ultimoIntervento),
     );
   }
 

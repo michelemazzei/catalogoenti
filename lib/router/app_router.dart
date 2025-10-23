@@ -1,6 +1,8 @@
 import 'package:catalogoenti/features/calibrazione/ui/materiali_con_ultima_calibrazione_screen.dart';
 import 'package:catalogoenti/features/calibrazione/ui/materiali_da_calibrare_screen.dart';
 import 'package:catalogoenti/features/calibrazione/ui/materiali_in_scadenza_screen.dart';
+import 'package:catalogoenti/features/contratti/ui/contratti_screen.dart';
+import 'package:catalogoenti/features/contratti/ui/contratto_dettaglio_screen.dart';
 import 'package:catalogoenti/features/dashboard/ui/dashboard_sreen.dart';
 import 'package:catalogoenti/features/enti/ui/ente_detail_screen.dart';
 import 'package:catalogoenti/features/enti/ui/enti_screen.dart';
@@ -21,14 +23,16 @@ final appRouter = GoRouter(
       path: '/enti',
       name: 'enti',
       builder: (context, state) => const EntiScreen(),
-    ),
-    GoRoute(
-      name: 'entiDetails',
-      path: '/entiDetails/:id',
-      builder: (context, state) {
-        final id = int.parse(state.pathParameters['id']!);
-        return EnteDetailScreen(enteId: id);
-      },
+      routes: [
+        GoRoute(
+          name: 'entiDetails',
+          path: ':id',
+          builder: (context, state) {
+            final id = int.parse(state.pathParameters['id']!);
+            return EnteDetailScreen(enteId: id);
+          },
+        ),
+      ],
     ),
     GoRoute(
       name: 'materialiPerEnte',
@@ -50,16 +54,6 @@ final appRouter = GoRouter(
       },
     ),
 
-    GoRoute(
-      name: 'contratti',
-      path: '/contratti',
-      builder: (context, state) {
-        return const PlaceholderScreen(
-          title: 'Contratti',
-          message: 'La pagina Materiali non è ancora disponibile.',
-        );
-      },
-    ),
     GoRoute(
       name: 'dacalibrare',
       path: '/materialidacalibrare',
@@ -86,6 +80,21 @@ final appRouter = GoRouter(
       name: 'materiali',
       path: '/materiali',
       builder: (context, state) => const MaterialiScreen(),
+    ),
+    GoRoute(
+      path: '/contratti',
+      name: 'contratti',
+      builder: (context, state) => const ContrattiScreen(),
+      routes: [
+        GoRoute(
+          path: ':id',
+          name: 'contrattoDettaglio',
+          builder: (context, state) {
+            final id = int.parse(state.pathParameters['id']!);
+            return ContrattoDettaglioScreen(id: id);
+          },
+        ),
+      ],
     ),
 
     GoRoute(
