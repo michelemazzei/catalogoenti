@@ -1,10 +1,20 @@
 import 'package:catalogoenti/data/database/app_database.dart';
 import 'package:catalogoenti/features/contratti/domain/contratto_dettaglio.dart';
 import 'package:catalogoenti/providers/database_provider.dart';
+import 'package:catalogoenti/shared/domain/riepilogo_costi_contratto.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'contratti_providers.g.dart';
+
+@riverpod
+Future<List<RiepilogoCostiContratto>> riepilogoCostiContratto(
+  Ref ref,
+  int idContratto,
+) async {
+  final dao = await ref.watch(daoSessionCQRSProvider.future);
+  return dao.contrattiQueries.getRiepilogoCostiPerContratto(idContratto);
+}
 
 @riverpod
 Future<List<Contratto>> tuttiIContratti(Ref ref) async {

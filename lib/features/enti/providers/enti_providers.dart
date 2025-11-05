@@ -1,6 +1,7 @@
 import 'package:catalogoenti/data/database/app_database.dart';
 import 'package:catalogoenti/features/materiali/providers/materiali_providers.dart';
 import 'package:catalogoenti/providers/database_provider.dart';
+import 'package:catalogoenti/shared/domain/materiale_per_ente.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

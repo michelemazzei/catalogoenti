@@ -2,6 +2,7 @@ import 'package:catalogoenti/features/contratti/providers/contratti_providers.da
 import 'package:catalogoenti/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ContrattoDettaglioScreen extends ConsumerWidget {
@@ -28,6 +29,17 @@ class ContrattoDettaglioScreen extends ConsumerWidget {
               'Tasso di rivalutazione: ${dettaglio.contratto.tassoRivalutazione ?? 0}',
             ),
             Text('Totale: ${euroFormat.format(dettaglio.costoTotale)}'),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.bar_chart),
+              label: const Text('Riepilogo Costi'),
+              onPressed: () {
+                context.pushNamed(
+                  'riepilogoCostiContratto',
+                  pathParameters: {'id': id.toString()},
+                );
+              },
+            ),
+
             const Divider(),
             Expanded(
               child: ListView.builder(

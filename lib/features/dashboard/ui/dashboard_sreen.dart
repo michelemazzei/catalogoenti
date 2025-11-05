@@ -85,7 +85,7 @@ class DashboardScreen extends HookConsumerWidget {
               DashboardCard(
                 label: 'Materiali',
                 count: stats.materialiCount,
-                onTap: () => context.pushNamed('materiali'),
+                onTap: () => context.pushNamed('materialiRaggruppati'),
               ),
               DashboardCard(
                 label: 'Da calibrare',

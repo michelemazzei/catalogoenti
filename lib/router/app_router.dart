@@ -3,10 +3,12 @@ import 'package:catalogoenti/features/calibrazione/ui/materiali_da_calibrare_scr
 import 'package:catalogoenti/features/calibrazione/ui/materiali_in_scadenza_screen.dart';
 import 'package:catalogoenti/features/contratti/ui/contratti_screen.dart';
 import 'package:catalogoenti/features/contratti/ui/contratto_dettaglio_screen.dart';
+import 'package:catalogoenti/features/contratti/ui/riepilogo_costi_contratto_screen.dart';
 import 'package:catalogoenti/features/dashboard/ui/dashboard_sreen.dart';
 import 'package:catalogoenti/features/enti/ui/ente_detail_screen.dart';
 import 'package:catalogoenti/features/enti/ui/enti_screen.dart';
 import 'package:catalogoenti/features/materiali/ui/materiale_dettaglio_screen.dart';
+import 'package:catalogoenti/features/materiali/ui/materiali_raggruppati_per_ente_screen.dart';
 import 'package:catalogoenti/features/materiali/ui/materiali_screen.dart';
 import 'package:catalogoenti/features/place_holder/ui/placeholder_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +47,7 @@ final appRouter = GoRouter(
         return MaterialiScreen(enteId: enteId, enteNome: enteNome);
       },
     ),
+
     GoRoute(
       name: 'materialeDettaglio',
       path: '/materiali/dettaglio/:id',
@@ -77,9 +80,9 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-      name: 'materiali',
-      path: '/materiali',
-      builder: (context, state) => const MaterialiScreen(),
+      name: 'materialiRaggruppati',
+      path: '/materialiRaggruppati',
+      builder: (context, state) => const MaterialiRaggruppatiPerEnteScreen(),
     ),
     GoRoute(
       path: '/contratti',
@@ -93,6 +96,16 @@ final appRouter = GoRouter(
             final id = int.parse(state.pathParameters['id']!);
             return ContrattoDettaglioScreen(id: id);
           },
+          routes: [
+            GoRoute(
+              path: 'riepilogo',
+              name: 'riepilogoCostiContratto',
+              builder: (context, state) {
+                final id = int.parse(state.pathParameters['id']!);
+                return RiepilogoCostiContrattoScreen(idContratto: id);
+              },
+            ),
+          ],
         ),
       ],
     ),

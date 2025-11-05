@@ -2,6 +2,7 @@ import 'package:catalogoenti/data/database/app_database.dart';
 import 'package:catalogoenti/features/materiali/domain/ente_con_reparti.dart';
 import 'package:catalogoenti/providers/database_provider.dart';
 import 'package:catalogoenti/shared/domain/materiale_con_ultimo_intervento.dart';
+import 'package:catalogoenti/shared/domain/materiale_per_ente.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -61,4 +62,12 @@ Future<List<EnteConReparti>> entiPerMateriale(Ref ref, int materialeId) async {
   }
 
   return entiMap.values.toList();
+}
+
+@riverpod
+Future<Map<String, List<MaterialePerEnte>>> materialiRaggruppatiPerEnte(
+  Ref ref,
+) async {
+  final queries = await ref.watch(materialiQueriesProvider.future);
+  return queries.getMaterialiRaggruppatiPerEnte();
 }

@@ -12,13 +12,16 @@ class TextSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: const Icon(Icons.search),
-        border: const OutlineInputBorder(),
+    return Padding(
+      padding: EdgeInsetsGeometry.all(7),
+      child: TextField(
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: const Icon(Icons.search),
+          border: const OutlineInputBorder(),
+        ),
+        onChanged: (value) => onChanged(value),
       ),
-      onChanged: (value) => onChanged(value),
     );
   }
 }
