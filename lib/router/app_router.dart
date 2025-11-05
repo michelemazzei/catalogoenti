@@ -1,3 +1,4 @@
+import 'package:catalogoenti/features/about/ui/about_app_page.dart';
 import 'package:catalogoenti/features/calibrazione/ui/materiali_con_ultima_calibrazione_screen.dart';
 import 'package:catalogoenti/features/calibrazione/ui/materiali_da_calibrare_screen.dart';
 import 'package:catalogoenti/features/calibrazione/ui/materiali_in_scadenza_screen.dart';
@@ -20,6 +21,11 @@ final appRouter = GoRouter(
       path: '/dashboard',
       name: 'dashboard',
       builder: (context, state) => const DashboardScreen(),
+    ),
+    GoRoute(
+      path: '/about',
+      name: 'about',
+      builder: (context, state) => AboutAppPage(),
     ),
     GoRoute(
       path: '/enti',
