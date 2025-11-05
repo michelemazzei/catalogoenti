@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:catalogoenti/features/materiali/domain/materiali_data_source.dart';
 import 'package:catalogoenti/features/materiali/providers/materiali_providers.dart';
 import 'package:catalogoenti/shared/widgets/text_search_bar.dart';
@@ -8,7 +10,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TabellaMaterialiPerEnteWidget extends HookConsumerWidget {
-  const TabellaMaterialiPerEnteWidget({super.key});
+  final String? enteId;
+
+  const TabellaMaterialiPerEnteWidget({super.key, this.enteId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +21,15 @@ class TabellaMaterialiPerEnteWidget extends HookConsumerWidget {
     final sortColumnIndex = useState<int?>(null);
     final sortAscending = useState(true);
     final rowsPerPage = useState(PaginatedDataTable.defaultRowsPerPage);
-    final searchQuery = useState('');
+    final rawQuery = useState('');
+    final debouncedQuery = useState('');
+    // Debounce: aggiorna debouncedQuery dopo 300ms
+    useEffect(() {
+      final timer = Timer(const Duration(milliseconds: 300), () {
+        debouncedQuery.value = rawQuery.value;
+      });
+      return timer.cancel;
+    }, [rawQuery.value]);
 
     return materialiAsync.when(
       data: (raggruppati) {
@@ -25,10 +37,16 @@ class TabellaMaterialiPerEnteWidget extends HookConsumerWidget {
           final ente = entry.key;
           return entry.value.map((m) => m.copyWith(ente: ente));
         }).toList();
+        // 🔍 Filtra per enteId se presente
+        final materialiPerEnte = enteId != null
+            ? tuttiMateriali
+                  .where((m) => m.enteId.toString() == enteId)
+                  .toList()
+            : tuttiMateriali;
 
         // Applica filtro
-        final materialiFiltrati = tuttiMateriali.where((m) {
-          final query = searchQuery.value.toLowerCase();
+        final materialiFiltrati = materialiPerEnte.where((m) {
+          final query = debouncedQuery.value.toLowerCase();
           return m.ente.toLowerCase().contains(query) ||
               m.reparto.toLowerCase().contains(query) ||
               m.localita.toLowerCase().contains(query) ||
@@ -62,7 +80,7 @@ class TabellaMaterialiPerEnteWidget extends HookConsumerWidget {
           children: [
             TextSearchBar(
               label: 'Cerca materiale...',
-              onChanged: (value) => searchQuery.value = value,
+              onChanged: (value) => rawQuery.value = value,
             ),
             const SizedBox(height: 16),
             Flexible(

@@ -66,6 +66,7 @@ class MaterialiQueries extends DatabaseAccessor<AppDatabase>
           '''
     SELECT 
       m.id as ID , 
+      e.id as enteId,
       e.nome AS ente,
       r.nome AS reparto,
       r.localita AS localita,
@@ -96,6 +97,7 @@ class MaterialiQueries extends DatabaseAccessor<AppDatabase>
     for (final row in rows) {
       final materiale = MaterialePerEnte(
         id: row.read<int>('ID'),
+        enteId: row.read<int>('enteId'),
         ente: row.read<String>('ente'),
         reparto: row.read<String>('reparto'),
         localita: row.read<String>('localita'),

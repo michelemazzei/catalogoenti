@@ -82,7 +82,9 @@ final appRouter = GoRouter(
     GoRoute(
       name: 'materialiRaggruppati',
       path: '/materialiRaggruppati',
-      builder: (context, state) => const MaterialiRaggruppatiPerEnteScreen(),
+      builder: (context, state) => MaterialiRaggruppatiPerEnteScreen(
+        enteId: state.uri.queryParameters['enteId'],
+      ),
     ),
     GoRoute(
       path: '/contratti',

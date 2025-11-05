@@ -6,6 +6,7 @@ abstract class MaterialePerEnte with _$MaterialePerEnte {
   const factory MaterialePerEnte({
     required int id,
     required String ente,
+    required int enteId,
     required String reparto,
     required String localita,
     required String partNumber,

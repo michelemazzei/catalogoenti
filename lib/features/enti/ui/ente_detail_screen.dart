@@ -20,12 +20,15 @@ class EnteDetailScreen extends ConsumerWidget {
         label: Text('Vedi Materiali (${materiali.$2.length})'),
         onPressed: () {
           context.pushNamed(
-            'materialiPerEnte',
-            pathParameters: {'enteId': enteId.toString()},
-            extra: materiali.$1.nome,
+            'materialiRaggruppati', // 👈 nome della route
+            queryParameters: {'enteId': enteId.toString()},
+            extra: materiali
+                .$1
+                .nome, // 👈 se vuoi passare anche il nome come extra
           );
         },
       ),
+
       loading: () => const CircularProgressIndicator(),
       error: (e, _) => Text('Errore materiali: $e'),
     );
