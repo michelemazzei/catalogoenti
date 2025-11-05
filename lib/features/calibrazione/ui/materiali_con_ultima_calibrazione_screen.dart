@@ -1,5 +1,5 @@
 import 'package:catalogoenti/features/calibrazione/providers/calibrazione_providers.dart';
-import 'package:catalogoenti/features/calibrazione/widgets/scadenze_widget.dart';
+import 'package:catalogoenti/features/calibrazione/widgets/tabella_scadenze_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,10 +13,7 @@ class MaterialiConUltimaCalibrazioneScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Materiali con ultimo intervento')),
       body: materialiAsync.when(
-        data: (materiali) => ScadenzeWidget(
-          materiali: materiali,
-          emptyMessage: Text('Nessun materiale trovato'),
-        ),
+        data: (materiali) => TabellaScadenzeWidget(materiali: materiali),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Errore: $err')),
       ),

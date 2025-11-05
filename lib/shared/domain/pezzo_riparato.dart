@@ -6,6 +6,8 @@ part 'pezzo_riparato.freezed.dart';
 abstract class PezzoRiparato with _$PezzoRiparato {
   factory PezzoRiparato({
     required int id,
+    required int enteId,
+    required String nomeEnte,
     required int quantita,
     required int periodicita,
     required String denominazione,

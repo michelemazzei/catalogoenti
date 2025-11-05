@@ -23,14 +23,16 @@ class MaterialiQueries extends DatabaseAccessor<AppDatabase>
     final result = await db
         .customSelect(
           '''
-    SELECT m.*, MAX(i.data_intervento) AS ultimo_intervento
+    SELECT m.*, e.id as ENTE_ID, e.nome as NOME_ENTE, MAX(i.data_intervento) AS ultimo_intervento
     FROM materiali m
     LEFT JOIN interventi i ON m.id = i.materiale_id
-    WHERE m.id = ?
+    LEFT JOIN reparti r ON r.id = m.reparto_id
+    LEFT JOIN enti e ON r.ente_id = e.id
+     WHERE m.id = ?
     GROUP BY m.id
     ''',
           variables: [Variable.withInt(id)],
-          readsFrom: {db.materiali, db.interventi},
+          readsFrom: {db.materiali, db.enti, db.reparti, db.interventi},
         )
         .getSingleOrNull();
 
@@ -41,6 +43,8 @@ class MaterialiQueries extends DatabaseAccessor<AppDatabase>
 
     return MaterialeConUltimoIntervento(
       materiale: materiale,
+      enteId: result.data['ENTE_ID'] as int?,
+      nomeEnte: result.data['NOME_ENTE'],
       ultimoIntervento: toDate(ultimoIntervento),
     );
   }

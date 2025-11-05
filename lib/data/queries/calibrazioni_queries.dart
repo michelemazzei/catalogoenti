@@ -19,9 +19,11 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
 
     final result = await customSelect(
       '''
-    SELECT m.*, MAX(i.data_intervento) AS ultimo_intervento
+    SELECT m.*, e.nome as ENTE_NOME, e.id as ENTE_ID, MAX(i.data_intervento) AS ultimo_intervento
     FROM materiali m
     LEFT JOIN interventi i ON m.id = i.materiale_id
+    LEFT JOIN reparti r ON r.id = m.reparto_id
+    LEFT JOIN enti e ON r.ente_id = e.id
     GROUP BY m.id
     HAVING ultimo_intervento BETWEEN ? AND ?
     ''',
@@ -29,7 +31,7 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
         Variable.withDateTime(inizioFinestra),
         Variable.withDateTime(fineFinestra),
       ],
-      readsFrom: {materiali, interventi},
+      readsFrom: {materiali, interventi, reparti, enti},
     ).get();
 
     return result.map((row) {
@@ -38,6 +40,8 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
       final ultimaData = rawTimestamp != null ? toDate(rawTimestamp) : null;
 
       return MaterialeConUltimoIntervento(
+        nomeEnte: row.data['ENTE_NOME'],
+        enteId: row.data['ENTE_ID'] as int?,
         materiale: materiale,
         ultimoIntervento: ultimaData,
       );
@@ -48,13 +52,15 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
   getMaterialiConUltimoIntervento() async {
     final result = await customSelect(
       '''
-    SELECT m.*, MAX(i.data_intervento) AS ultimo_intervento
+    SELECT m.*,e.id as ENTE_ID, e.nome as NOME_ENTE, MAX(i.data_intervento) AS ultimo_intervento
     FROM materiali m
     LEFT JOIN interventi i ON m.id = i.materiale_id
+    LEFT JOIN reparti r ON r.id = m.reparto_id
+    LEFT JOIN enti e ON r.ente_id = e.id
     GROUP BY m.id
     ORDER BY m.part_number
     ''',
-      readsFrom: {materiali, interventi},
+      readsFrom: {materiali, interventi, reparti, enti},
     ).get();
 
     return result.map((row) {
@@ -62,7 +68,9 @@ class CalibrazioniQueries extends DatabaseAccessor<AppDatabase>
       final rawTimestamp = row.data['ultimo_intervento'] as int?;
       final ultimaData = rawTimestamp != null ? toDate(rawTimestamp) : null;
       return MaterialeConUltimoIntervento(
+        nomeEnte: row.data['NOME_ENTE'],
         materiale: materiale,
+        enteId: row.data['ENTE_ID'] as int?,
         ultimoIntervento: ultimaData,
       );
     }).toList();

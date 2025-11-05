@@ -1,9 +1,10 @@
 import 'package:catalogoenti/features/contratti/providers/contratti_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class RiepilogoCostiContrattoWidget extends ConsumerWidget {
+class RiepilogoCostiContrattoWidget extends HookConsumerWidget {
   final int idContratto;
 
   const RiepilogoCostiContrattoWidget({required this.idContratto, super.key});
@@ -15,9 +16,39 @@ class RiepilogoCostiContrattoWidget extends ConsumerWidget {
     );
     final formatter = NumberFormat.currency(locale: 'it_IT', symbol: '€');
 
+    final sortColumnIndex = useState<int?>(null);
+    final sortAscending = useState(true);
+
     return riepilogoAsync.when(
       data: (riepilogo) {
-        final totaleGenerale = riepilogo.fold<double>(
+        final sortedRiepilogo = [...riepilogo];
+        if (sortColumnIndex.value != null) {
+          sortedRiepilogo.sort((a, b) {
+            int result;
+            switch (sortColumnIndex.value) {
+              case 0:
+                result = a.ente.compareTo(b.ente);
+                break;
+              case 1:
+                result = a.numeroInterventi.compareTo(b.numeroInterventi);
+                break;
+              case 2:
+                result = a.totalePezzi.compareTo(b.totalePezzi);
+                break;
+              case 3:
+                result = a.prezzoUnitarioMedio.compareTo(b.prezzoUnitarioMedio);
+                break;
+              case 4:
+                result = a.totale.compareTo(b.totale);
+                break;
+              default:
+                result = 0;
+            }
+            return sortAscending.value ? result : -result;
+          });
+        }
+
+        final totaleGenerale = sortedRiepilogo.fold<double>(
           0.0,
           (sum, e) => sum + e.totale,
         );
@@ -25,15 +56,51 @@ class RiepilogoCostiContrattoWidget extends ConsumerWidget {
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: DataTable(
-            columns: const [
-              DataColumn(label: Text('Ente')),
-              DataColumn(label: Text('Interventi')),
-              DataColumn(label: Text('Pezzi')),
-              DataColumn(label: Text('Prezzo medio')),
-              DataColumn(label: Text('Totale')),
+            sortColumnIndex: sortColumnIndex.value,
+            sortAscending: sortAscending.value,
+            columns: [
+              DataColumn(
+                label: const Text('Ente'),
+                onSort: (i, asc) {
+                  sortColumnIndex.value = i;
+                  sortAscending.value = asc;
+                },
+              ),
+              DataColumn(
+                label: const Text('Interventi'),
+                numeric: true,
+                onSort: (i, asc) {
+                  sortColumnIndex.value = i;
+                  sortAscending.value = asc;
+                },
+              ),
+              DataColumn(
+                label: const Text('Pezzi'),
+                numeric: true,
+                onSort: (i, asc) {
+                  sortColumnIndex.value = i;
+                  sortAscending.value = asc;
+                },
+              ),
+              DataColumn(
+                label: const Text('Prezzo medio'),
+                numeric: true,
+                onSort: (i, asc) {
+                  sortColumnIndex.value = i;
+                  sortAscending.value = asc;
+                },
+              ),
+              DataColumn(
+                label: const Text('Totale'),
+                numeric: true,
+                onSort: (i, asc) {
+                  sortColumnIndex.value = i;
+                  sortAscending.value = asc;
+                },
+              ),
             ],
             rows: [
-              ...riepilogo.map(
+              ...sortedRiepilogo.map(
                 (e) => DataRow(
                   cells: [
                     DataCell(Text(e.ente)),

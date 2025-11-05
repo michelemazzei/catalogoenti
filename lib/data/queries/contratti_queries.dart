@@ -21,29 +21,45 @@ class ContrattiQueries extends DatabaseAccessor<AppDatabase>
     return db
         .customSelect(
           '''
-    SELECT m.id AS materiale_id,
-           m.denominazione as denominazione,
-           m.part_number as part_number,  
-           m.nsn as nsn,  
-           m.periodicita as periodicita,
-           m.quantita as quantita,
-           i.prezzo_unitario AS costo , 
-           i.data_intervento as data
-    FROM  interventi i, materiali m, intervento_contratti ic
-    WHERE 
-          i.materiale_id = m.id
-    AND
-          ic.contratto_id = ? 
-    AND
-          ic.intervento_id = i.id 
-    ORDER BY  part_number
+WITH ultimi_interventi AS (
+  SELECT i.materiale_id, MAX(i.data_intervento) AS data_intervento
+  FROM interventi i
+  JOIN intervento_contratti ic ON ic.intervento_id = i.id
+  WHERE ic.contratto_id = ?
+  GROUP BY i.materiale_id
+)
+
+SELECT 
+  m.id AS materiale_id,
+  ente.id AS ID_ENTE,
+  ente.nome AS NOME_ENTE,
+  m.denominazione,
+  m.part_number,
+  m.nsn,
+  m.periodicita,
+  m.quantita,
+  i.prezzo_unitario AS costo,
+  i.data_intervento AS data
+FROM materiali m
+JOIN reparti reparto ON m.reparto_id = reparto.id
+JOIN enti ente ON reparto.ente_id = ente.id
+JOIN interventi i ON i.materiale_id = m.id
+JOIN intervento_contratti ic ON ic.intervento_id = i.id
+JOIN ultimi_interventi ui ON ui.materiale_id = i.materiale_id AND ui.data_intervento = i.data_intervento
+WHERE ic.contratto_id = ?
+ORDER BY m.part_number;
 
     ''',
-          variables: [Variable.withInt(contrattoId)],
-          readsFrom: {db.interventi, db.materiali},
+          variables: [
+            Variable.withInt(contrattoId),
+            Variable.withInt(contrattoId),
+          ],
+          readsFrom: {db.interventi, db.enti, db.materiali},
         )
         .map((row) {
           return PezzoRiparato(
+            enteId: row.read<int>('ID_ENTE'),
+            nomeEnte: row.read<String>('NOME_ENTE'),
             denominazione: row.read<String?>('denominazione') ?? '',
             id: row.read<int>('materiale_id'),
             periodicita: row.read<int>('periodicita'),

@@ -8,6 +8,8 @@ abstract class MaterialeConUltimoIntervento
     with _$MaterialeConUltimoIntervento {
   const factory MaterialeConUltimoIntervento({
     required Materiale materiale,
+    required String? nomeEnte,
+    required int? enteId,
     DateTime? ultimoIntervento,
   }) = _MaterialeConUltimoIntervento;
 }
