@@ -49,7 +49,16 @@ class ContrattoDettaglioScreen extends HookConsumerWidget {
             });
           }
 
-          final dataSource = _PezziRiparatiDataSource(sortedPezzi, euroFormat);
+          final dataSource = _PezziRiparatiDataSource(
+            sortedPezzi,
+            euroFormat,
+            onSelect: (int materialeId) {
+              context.pushNamed(
+                'materialeDettaglio',
+                pathParameters: {'id': materialeId.toString()},
+              );
+            },
+          );
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,14 +157,20 @@ class ContrattoDettaglioScreen extends HookConsumerWidget {
 class _PezziRiparatiDataSource extends DataTableSource {
   final List<PezzoRiparato> pezzi;
   final NumberFormat euroFormat;
+  final Function(int) onSelect;
 
-  _PezziRiparatiDataSource(this.pezzi, this.euroFormat);
+  _PezziRiparatiDataSource(
+    this.pezzi,
+    this.euroFormat, {
+    required this.onSelect,
+  });
 
   @override
   DataRow? getRow(int index) {
     if (index >= pezzi.length) return null;
     final p = pezzi[index];
     return DataRow.byIndex(
+      onSelectChanged: (_) => onSelect(p.id),
       index: index,
       cells: [
         DataCell(Text(p.nomeEnte)),
