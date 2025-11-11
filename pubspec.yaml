@@ -34,7 +34,6 @@ dependencies:
   about: ^2.2.0
   package_info_plus: ^9.0.0
   flutter_markdown: ^0.7.7+1
-  icons_launcher: ^3.0.0
 
 
 
@@ -48,14 +47,14 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   import_sorter: ^4.6.0
   freezed: ^3.1.0
+  flutter_launcher_icons: ^0.14.4
 
-
-icons_launcher:
-  image_path: "assets/icon/app_icon.png"
-  platforms:
-    windows:
-      enable: true
-      image_path: "assets/icon/app_icon.png"
+flutter_launcher_icons:
+  windows:
+    generate: true
+    image_path: "assets/icon/app_icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+ 
 
 flutter:
   assets:
