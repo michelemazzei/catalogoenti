@@ -37,7 +37,7 @@ class AppDrawer extends ConsumerWidget {
                     width: 72,
                     height: 72,
                     child: Image.asset(
-                      'assets/icon/app_icon.jpg',
+                      'assets/icon/app_icon.png',
                       fit: BoxFit.cover,
                     ),
                   ),

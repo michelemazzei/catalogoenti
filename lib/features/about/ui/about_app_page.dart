@@ -16,7 +16,11 @@ class AboutAppPage extends StatelessWidget {
           title: const Text('Informazioni sull\'app'),
           applicationName: 'Catalogo Materiali e Calibrazioni',
           applicationVersion: info?.version ?? '?.?.?',
-          applicationIcon: const FlutterLogo(),
+          applicationIcon: SizedBox(
+            width: 72,
+            height: 72,
+            child: Image.asset('assets/icon/app_icon.png', fit: BoxFit.contain),
+          ),
           applicationLegalese: '© ${DateTime.now().year} COMLOG 2^ Div',
           children: const <Widget>[
             MarkdownPageListTile(
