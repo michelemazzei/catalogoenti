@@ -34,6 +34,7 @@ dependencies:
   about: ^2.2.0
   package_info_plus: ^9.0.0
   flutter_markdown: ^0.7.7+1
+  icons_launcher: ^3.0.0
 
 
 
@@ -49,10 +50,17 @@ dev_dependencies:
   freezed: ^3.1.0
 
 
-
+icons_launcher:
+  image_path: "assets/icon/app_icon.jpg"
+  platforms:
+    windows:
+      enable: true
+      image_path: "assets/icon/app_icon.jpg"
 
 flutter:
   assets:
     - assets/about.md
+    - assets/icon/app_icon.jpg
+
   uses-material-design: true
 
